@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -35,9 +36,15 @@ public class UserModel implements UserDetails, Serializable {
     @Column(nullable = false)
     private LocalDateTime registrationDate;
 
+    @ManyToMany
+    @JoinTable(name = "TB_USERS_ROLES",
+               joinColumns = @JoinColumn(name = "user_id"),
+               inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<RoleModel> roles;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.roles;
     }
 
     @Override
